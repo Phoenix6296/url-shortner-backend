@@ -2,12 +2,14 @@ const express = require("express");
 const app = express();
 require("dotenv").config();
 const cors = require("cors");
-const connectToMongoDB = require("./connect");
-const URL = require("./models/url");
-const urlRoute = require("./routes/url");
 
-//Connect to DB
+// DB Connection
+const connectToMongoDB = require("./connect");
 connectToMongoDB(process.env.MONGODB_URL);
+
+// Routes
+const urlRoute = require("./routes/url");
+const slugRoute = require("./routes/slug");
 
 //Middleware
 const corsOptions = {
@@ -21,14 +23,7 @@ app.use(express.json());
 
 //Routes
 app.use("/url", urlRoute);
-app.get("/:shortId", async (req, res) => {
-  const shortId = req.params.shortId;
-  const entry = await URL.findOneAndUpdate(
-    { shortId },
-    { $push: { visitHistory: { timestamp: Date.now() } } }
-  );
-  res.redirect(301, entry.redirectUrl);
-});
+app.use("/", slugRoute);
 
 // Start the server
 const PORT = process.env.PORT || 8080;
