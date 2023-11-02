@@ -5,11 +5,12 @@ const cors = require("cors");
 
 // DB Connection
 const connectToMongoDB = require("./connect");
-connectToMongoDB(process.env.MONGODB_URL);
+connectToMongoDB();
 
 // Routes
 const urlRoute = require("./routes/url");
 const slugRoute = require("./routes/slug");
+const authRoute = require("./routes/auth");
 
 //Middleware
 const corsOptions = {
@@ -24,6 +25,7 @@ app.use(express.json());
 //Routes
 app.use("/url", urlRoute);
 app.use("/", slugRoute);
+app.use("/auth", authRoute);
 
 // Start the server
 const PORT = process.env.PORT || 8080;
