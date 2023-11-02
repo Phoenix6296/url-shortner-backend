@@ -22,7 +22,9 @@ const handleLogin = async (req, res) => {
       return res.status(404).json({ message: "User does not exist" });
     } else {
       if (user.password === password) {
-        return res.status(200).json({ message: "User logged in successfully" });
+        return res
+          .status(200)
+          .json({ name: user.name, message: "User logged in successfully" });
       } else {
         return res.status(401).json({ message: "Invalid credentials" });
       }
